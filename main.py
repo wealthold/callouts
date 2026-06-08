@@ -1,3 +1,4 @@
+import pkg_resources
 import nextcord
 from nextcord import Interaction
 from nextcord.ui import Modal, TextInput
