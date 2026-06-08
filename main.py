@@ -25,13 +25,13 @@ class CalloutModal(Modal):
         self.entry = TextInput(label="Entry Price", placeholder="e.g. 2342.50", required=True, max_length=20)
         self.stop_loss = TextInput(label="Stop Loss", placeholder="e.g. 2336.00", required=True, max_length=20)
         self.take_profit = TextInput(label="Take Profit", placeholder="e.g. 2358.00", required=True, max_length=20)
-        self.reason = TextInput(label="Reason", placeholder="Brief trade reason...", required=True, style=nextcord.TextInputStyle.paragraph, max_length=500)
+        
         self.add_item(self.pair)
         self.add_item(self.direction)
         self.add_item(self.entry)
         self.add_item(self.stop_loss)
         self.add_item(self.take_profit)
-        self.add_item(self.reason)
+        
 
     async def callback(self, interaction: Interaction):
         await interaction.response.defer(ephemeral=True)
@@ -56,7 +56,7 @@ class CalloutModal(Modal):
         embed.add_field(name="💰 ENTRY", value=f"`{self.entry.value.strip()}`", inline=True)
         embed.add_field(name="🛑 STOP LOSS", value=f"`{self.stop_loss.value.strip()}`", inline=True)
         embed.add_field(name="🎯 TAKE PROFIT", value=f"`{self.take_profit.value.strip()}`", inline=True)
-        embed.add_field(name="📋 REASON", value=self.reason.value.strip(), inline=False)
+        
         embed.add_field(name="⚠️ EXECUTION RULES", value="Read the full callout before entering. Enter exactly as posted. Do **not** enter more than **2 minutes** after this post. Monitor this channel closely for updates.", inline=False)
         embed.set_footer(text=f"Wealth Woken  •  Posted {date_str} at {time_str}")
         embed.set_author(name="WEALTH WOKEN CALLOUTS", icon_url=LOGO_URL)
