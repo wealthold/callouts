@@ -89,10 +89,8 @@ class CalloutModal(Modal):
 
 @bot.slash_command(name="callout", description="Post a Wealth Woken trade callout")
 async def callout(interaction: Interaction):
-    try:
-        await interaction.response.send_modal(CalloutModal())
-    except Exception as e:
-        print(f"Error sending modal: {e}")
+    modal = CalloutModal()
+    await interaction.response.send_modal(modal)
 
 
 @bot.event
