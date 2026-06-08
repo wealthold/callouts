@@ -8,7 +8,7 @@ from nextcord.ui import Modal, TextInput
 from nextcord.ext import commands
 
 TOKEN = os.environ.get("DISCORD_TOKEN")
-CALLOUTS_CHANNEL_NAME = "callouts"
+CALLOUTS_CHANNEL_NAME = "call-outs"
 LOGO_URL = "https://cdn.discordapp.com/attachments/1451020864345604138/1513409109167444148/logo_transparent.png"
 
 intents = nextcord.Intents.default()
