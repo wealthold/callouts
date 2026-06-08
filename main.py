@@ -6,6 +6,8 @@ import asyncio
 import os
 from datetime import datetime
 import pytz
+from aiohttp import web
+import threading
 
 TOKEN = os.environ.get("DISCORD_TOKEN")
 CALLOUTS_CHANNEL_NAME = "callouts"
@@ -97,5 +99,18 @@ async def callout(interaction: Interaction):
 async def on_ready():
     print(f"Wealth Woken Callouts Bot is online as {bot.user}")
 
+async def health_check(request):
+    return web.Response(text="OK")
 
+async def start_web():
+    app = web.Application()
+    app.router.add_get('/', health_check)
+    runner = web.AppRunner(app)
+    await runner.setup()
+    site = web.TCPSite(runner, '0.0.0.0', int(os.environ.get('PORT', 8080)))
+    await site.start()
+
+@bot.event
+async def on_connect():
+    await start_web()
 bot.run(TOKEN)
