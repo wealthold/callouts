@@ -2,3 +2,4 @@ setuptools==69.5.1
 audioop-lts==0.2.1
 nextcord==2.6.0
 pytz==2023.3
+aiohttp
