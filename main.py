@@ -80,9 +80,81 @@ class CalloutModal(Modal):
         expiry_embed.set_footer(text="Wealth Woken  •  Follow rules. Every trade is documented.")
         await channel.send(embed=expiry_embed)
 
+class UpdateModal(Modal):
+    def __init__(self):
+        super().__init__("Wealth Woken Update", timeout=300)
+
+        self.update_title = TextInput(
+            label="UPDATE",
+            placeholder="e.g. Move Stop Loss to Break Even",
+            required=True,
+            max_length=80
+        )
+
+        self.pair_direction = TextInput(
+            label="Pair | BUY/SELL",
+            placeholder="e.g. XAUUSD | BUY",
+            required=True,
+            max_length=30
+        )
+
+        self.main_message = TextInput(
+            label="Main Update Message",
+            placeholder="e.g. Secure partials now and move SL to entry.",
+            required=True,
+            max_length=300
+        )
+
+        self.footer_note = TextInput(
+            label="Footer Note",
+            placeholder="e.g. Stay disciplined and manage risk.",
+            required=False,
+            max_length=120
+        )
+
+        self.add_item(self.update_title)
+        self.add_item(self.pair_direction)
+        self.add_item(self.main_message)
+        self.add_item(self.footer_note)
+
+    async def callback(self, interaction: Interaction):
+        channel = nextcord.utils.get(interaction.guild.text_channels, name=CALLOUTS_CHANNEL_NAME)
+
+        if channel is None:
+            await interaction.response.send_message(
+                "Could not find the call-outs channel.",
+                ephemeral=True
+            )
+            return
+
+        embed = nextcord.Embed(
+            title=self.update_title.value,
+            description=self.main_message.value,
+            color=0xD4AF37
+        )
+
+        embed.add_field(
+            name="Pair | BUY/SELL",
+            value=self.pair_direction.value,
+            inline=False
+        )
+
+        if self.footer_note.value:
+            embed.set_footer(text=self.footer_note.value)
+
+        embed.set_thumbnail(url=LOGO_URL)
+
+        await channel.send(embed=embed)
+        await interaction.response.send_message(
+            "Trade update sent successfully.",
+            ephemeral=True
+        )
 @bot.slash_command(name="callout", description="Post a Wealth Woken trade callout")
 async def callout(interaction: Interaction):
     await interaction.response.send_modal(CalloutModal())
+    @bot.slash_command(name="update", description="Send a trade update")
+async def update(interaction: Interaction):
+    await interaction.response.send_modal(UpdateModal())
 
 @bot.event
 async def on_ready():
