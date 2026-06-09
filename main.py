@@ -153,7 +153,7 @@ class UpdateModal(Modal):
 
         if self.footer_note.value:
             embed.add_field(
-                name="📝 Footer Note",
+                name="📝Note",
                 value=self.footer_note.value,
                 inline=False
             )
