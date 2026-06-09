@@ -117,7 +117,7 @@ class UpdateModal(Modal):
         self.add_item(self.main_message)
         self.add_item(self.footer_note)
 
-    async def callback(self, interaction: Interaction):
+        async def callback(self, interaction: Interaction):
         channel = nextcord.utils.get(interaction.guild.text_channels, name=CALLOUTS_CHANNEL_NAME)
 
         if channel is None:
@@ -127,26 +127,42 @@ class UpdateModal(Modal):
             )
             return
 
+        pair_text = self.pair_direction.value.upper()
+
+        if "BUY" in pair_text:
+            embed_color = 0x00C853
+            side_emoji = "🟢"
+        elif "SELL" in pair_text:
+            embed_color = 0xD50000
+            side_emoji = "🔴"
+        else:
+            embed_color = 0xD4AF37
+            side_emoji = "🟡"
+
         embed = nextcord.Embed(
-            title=self.update_title.value,
-            description=self.main_message.value,
-            color=0xD4AF37
+            title=f"{side_emoji} {self.update_title.value}",
+            description=f"📢 {self.main_message.value}",
+            color=embed_color
         )
 
         embed.add_field(
-            name="Pair | BUY/SELL",
+            name="📊 Pair | BUY/SELL",
             value=self.pair_direction.value,
             inline=False
         )
 
         if self.footer_note.value:
-            embed.set_footer(text=self.footer_note.value)
+            embed.add_field(
+                name="📝 Footer Note",
+                value=self.footer_note.value,
+                inline=False
+            )
 
         embed.set_thumbnail(url=LOGO_URL)
 
         await channel.send(embed=embed)
         await interaction.response.send_message(
-            "Trade update sent successfully.",
+            "✅ Trade update sent successfully.",
             ephemeral=True
         )
 @bot.slash_command(name="callout", description="Post a Wealth Woken trade callout")
