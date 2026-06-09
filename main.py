@@ -117,7 +117,7 @@ class UpdateModal(Modal):
         self.add_item(self.main_message)
         self.add_item(self.footer_note)
 
-        async def callback(self, interaction: Interaction):
+    async def callback(self, interaction: Interaction):
         channel = nextcord.utils.get(interaction.guild.text_channels, name=CALLOUTS_CHANNEL_NAME)
 
         if channel is None:
