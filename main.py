@@ -173,6 +173,53 @@ async def callout(interaction: Interaction):
 async def update(interaction: Interaction):
     await interaction.response.send_modal(UpdateModal())
 
+@bot.slash_command(name="closetrade", description="Close a trade with optional screenshot", guild_ids=[1451020863561404508])
+async def closetrade(interaction: Interaction, title: str, screenshot: nextcord.Attachment = None):
+    channel = nextcord.utils.get(interaction.guild.text_channels, name=CALLOUTS_CHANNEL_NAME)
+
+    if channel is None:
+        await interaction.response.send_message(
+            "Could not find the call-outs channel.",
+            ephemeral=True
+        )
+        return
+
+    title_text = title.upper()
+
+    if "BUY" in title_text:
+        embed_color = 0x00C853
+        side_emoji = "🟢"
+    elif "SELL" in title_text:
+        embed_color = 0xD50000
+        side_emoji = "🔴"
+    else:
+        embed_color = 0xD4AF37
+        side_emoji = "🟡"
+
+    embed = nextcord.Embed(
+        title=f"{side_emoji} CLOSED TRADE",
+        description=f"**{title}**",
+        color=embed_color
+    )
+
+    embed.set_thumbnail(url=LOGO_URL)
+
+    file_to_send = None
+
+    if screenshot is not None:
+        file_to_send = await screenshot.to_file()
+        embed.set_image(url=f"attachment://{file_to_send.filename}")
+
+    await interaction.response.send_message(
+        "✅ Closed trade posted successfully.",
+        ephemeral=True
+    )
+
+    if file_to_send:
+        await channel.send(embed=embed, file=file_to_send)
+    else:
+        await channel.send(embed=embed)
+
 @bot.event
 async def on_ready():
     print(f"Wealth Woken Callouts Bot is online as {bot.user}")
