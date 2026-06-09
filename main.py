@@ -153,7 +153,7 @@ class UpdateModal(Modal):
 async def callout(interaction: Interaction):
     await interaction.response.send_modal(CalloutModal())
     
-@bot.slash_command(name="update", description="Send a trade update")
+@bot.slash_command(name="update", description="Wealth Woken Update")
 async def update(interaction: Interaction):
     await interaction.response.send_modal(UpdateModal())
 
